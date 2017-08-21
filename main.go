@@ -13,6 +13,6 @@ func main() {
 		models.AutoMigrate()
 	}
     beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
-    beego.BConfig.ServerName = "laotanyuV1"
+    beego.BConfig.ServerName = "laotanyu"
 	beego.Run()
 }
