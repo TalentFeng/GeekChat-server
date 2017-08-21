@@ -1,0 +1,19 @@
+appname = GeekChat-server
+httpport = 8080
+runmode = dev
+SessionOn = true
+SessionProvider = file
+SessionProviderConfig = ./tmp
+EnableDocs = true
+enablexsrf = false
+xsrfkey = 61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o
+xsrfexpire = 3600
+salt = geekchat
+
+[postgresql]
+host=localhost
+port=5432
+user=postgres
+dbname=postgres
+sslmode=disable
+password=
