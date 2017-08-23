@@ -35,7 +35,7 @@ func (c *UserController) Register() {
 			beego.Critical(err)
 		}
 		for _, err := range valid.Errors {
-			beego.Info([]byte(err.Message))
+			beego.Info(err.Message)
 		}
 		c.Abort("400")
 	}

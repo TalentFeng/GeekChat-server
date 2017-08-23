@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/TalentFeng/GeekChat-server/models"
+	"github.com/TalentFeng/GeekChat-server/tools"
 	"github.com/astaxie/beego"
 )
 
@@ -31,20 +32,26 @@ func (c *UserInfoController) SetAvatar() {
 		c.Abort("400")
 	}
 	defer f.Close()
+
+	if mime := h.Header.Get("Content-Type"); mime[0:5] != "image" {
+		beego.Critical(h.Header.Get("Content-Type"))
+		c.Abort("400")
+	}
+
 	var (
-		db      = models.GetDb()
-		user, _ = c.Ctx.Input.Session("user").(models.User)
-		dir     = "static/upload/" + strconv.Itoa(c.GetSession("uid").(int))
+		db  = models.GetDb()
+		uid = c.GetSession("uid").(int)
+		dir = "static/upload/" + strconv.Itoa(uid)
 	)
 	defer db.Close()
-	os.MkdirAll(dir, 777)
+	os.MkdirAll(dir, 0777)
 	beego.Info(dir)
-	err = c.SaveToFile("img", dir+"/"+h.Filename)
+	err = c.SaveToFile("img", dir+"/"+tools.Md5sum(h.Filename))
 	if err != nil {
 		beego.Critical(err)
 		c.Abort("500")
 	}
-	err = db.Save(&models.UserInfo{Uid: user.Id, Avatar: h.Filename}).Error
+	err = db.Save(&models.UserInfo{Uid: uid, Avatar: tools.Md5sum(h.Filename)}).Error
 	if err != nil {
 		beego.Critical(err)
 		c.Abort("500")
