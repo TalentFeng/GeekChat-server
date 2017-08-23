@@ -2,9 +2,10 @@ package models
 
 import (
 	"time"
+
+	"github.com/astaxie/beego"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/astaxie/beego"
 )
 
 func GetDb() *gorm.DB {
@@ -23,22 +24,23 @@ func GetDb() *gorm.DB {
 }
 
 type User struct {
-	Id int `gorm:"primary_key;AUTO_INCREMENT"`
-	Phone string `gorm:"not null;size:11;unique;" valid:"Phone"`
-	Mail string `gorm:"size:20;unique;" valid:"Email"`
-	Password string `gorm:"not null;size:50 valid:MaxSize(50)"`
+	Id            int       `gorm:"primary_key;AUTO_INCREMENT"`
+	Phone         string    `gorm:"not null;size:11;unique;" valid:"Phone"`
+	Mail          string    `gorm:"size:20;unique;" valid:"Email"`
+	Password      string    `gorm:"not null;size:50 valid:MaxSize(50)"`
 	Modified_time time.Time `gorm:"default:current_timestamp"`
 }
 
 type UserInfo struct {
-	user User
-	Profile string `gorm:"not null;size:11;unique"`
-	Portrait string `gorm:"size:11;unique"`
-	Password string `gorm:"not null;size:50"`
+	Uid           int       `gorm:"primary_key;"`
+	Profile       string    `gorm:"not null;size:11;unique"`
+	Avatar        string    `gorm:"size:100;unique"`
+	Password      string    `gorm:"not null;size:50"`
 	Modified_time time.Time `gorm:"default:current_timestamp"`
 }
 
 func AutoMigrate() {
-    db := GetDb()
-    db.AutoMigrate(&User{}, &UserInfo{})
+	db := GetDb()
+	db.AutoMigrate(&User{}, &UserInfo{})
+	db.Close()
 }

@@ -1,4 +1,4 @@
 conf/*.conf
-swagger
-tmp
+swagger/
+tmp/
 GeekChat-server

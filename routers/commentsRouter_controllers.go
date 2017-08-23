@@ -25,8 +25,24 @@ func init() {
 
 	beego.GlobalControllerRouter["github.com/TalentFeng/GeekChat-server/controllers:UserController"] = append(beego.GlobalControllerRouter["github.com/TalentFeng/GeekChat-server/controllers:UserController"],
 		beego.ControllerComments{
+			Method: "Logout",
+			Router: `/logout`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/TalentFeng/GeekChat-server/controllers:UserController"] = append(beego.GlobalControllerRouter["github.com/TalentFeng/GeekChat-server/controllers:UserController"],
+		beego.ControllerComments{
 			Method: "Register",
 			Router: `/register`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["github.com/TalentFeng/GeekChat-server/controllers:UserInfoController"] = append(beego.GlobalControllerRouter["github.com/TalentFeng/GeekChat-server/controllers:UserInfoController"],
+		beego.ControllerComments{
+			Method: "SetAvatar",
+			Router: `/setAvatar`,
 			AllowHTTPMethods: []string{"post"},
 			MethodParams: param.Make(),
 			Params: nil})
