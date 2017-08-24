@@ -95,3 +95,36 @@ func (c *UserController) Logout() {
 	c.Data["json"] = "ok"
 	c.ServeJSON()
 }
+
+// @Title reset
+// @Description 修改密码
+// @Param password query false 原始密码
+// @Param mail query true 原始邮箱
+// @Param newPassword query false 新密码
+// @Success 200 {string} ok
+// @Failure 400 参数错误
+// @Failure 500 服务器错误
+func (c *UserController) ResetPassword() {
+	mail := c.GetString("mail")
+	password := c.GetString("password")
+	n_password := c.GetString("newPassword")
+	var (
+		user  = models.User{Mail: mail, Password: password}
+		valid = validation.Validation{}
+		db    = models.GetDb()
+	)
+	if ok, err := valid.Valid(user); !ok {
+		beego.Critical(err)
+		c.Abort("400")
+	}
+
+	defer db.Close()
+	if err := db.Find(&user, user).Error; err != nil {
+		beego.Critical(err)
+		c.Abort("400")
+	}
+	user.Password = n_password
+	db.Save(user)
+	c.Data["json"] = "ok"
+	c.ServeJSON()
+}
