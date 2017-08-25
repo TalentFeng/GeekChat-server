@@ -22,15 +22,14 @@ type UserController struct {
 // @router /register [post]
 func (c *UserController) Register() {
 	var (
-		user models.User
-		db   = models.GetDb()
+		user  = new(models.User)
+		db    = models.GetDb()
+		valid = new(validation.Validation)
 	)
 	defer db.Close()
-	valid := new(validation.Validation)
-	user.Phone = c.GetString("phone")
-	user.Mail = c.GetString("mail")
-	user.Password = tools.Password(c.GetString("password"))
-	if ok, err := valid.Valid(&user); !ok {
+	c.ParseForm(user)
+	user.Password = tools.Password(user.Password)
+	if ok, err := valid.Valid(user); !ok {
 		if err != nil {
 			beego.Critical(err)
 		}
@@ -59,22 +58,18 @@ func (c *UserController) Register() {
 // @router /login [post]
 func (c *UserController) Login() {
 	var (
-		user  models.User
+		user  = new(models.User)
 		valid validation.Validation
 		db    = models.GetDb()
 	)
 	defer db.Close()
-	user.Password = tools.Password(c.GetString("password"))
-	user.Phone = c.GetString("phone")
-	user.Mail = c.GetString("mail")
-	valid.Phone(user.Phone, "phone")
-	if valid.HasErrors() {
-		for _, err := range valid.Errors {
-			if err != nil {
-				c.Abort("400")
-			}
-		}
+	c.ParseForm(user)
+	user.Password = tools.Password(user.Password)
+	if err := valid.Phone(user.Phone, "phone").Error; err != nil {
+		beego.Info(err)
+		c.Abort("400")
 	}
+
 	if err := db.Find(&user, user).Error; err != nil {
 		beego.Critical(err)
 		c.Abort("400")

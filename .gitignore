@@ -5,3 +5,5 @@ GeekChat-server
 .DS_Store
 .idea/
 static/
+routers/co*
+lastupdate.tmp

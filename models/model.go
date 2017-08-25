@@ -25,17 +25,16 @@ func GetDb() *gorm.DB {
 
 type User struct {
 	Id            int       `gorm:"primary_key;AUTO_INCREMENT"`
-	Phone         string    `gorm:"not null;size:11;unique;" valid:"Phone"`
-	Mail          string    `gorm:"size:20;unique;" valid:"Email"`
-	Password      string    `gorm:"not null;size:50 valid:MaxSize(50)"`
+	Phone         string    `gorm:"not null;size:11;unique;" valid:"Phone" form:"phone"`
+	Mail          string    `gorm:"size:20;unique;" valid:"Email" form:"mail"`
+	Password      string    `gorm:"not null;size:50 valid:MaxSize(50)" form:"password"`
 	Modified_time time.Time `gorm:"default:current_timestamp"`
 }
 
 type UserInfo struct {
-	Uid           int       `gorm:"primary_key;"`
-	Profile       string    `gorm:"not null;size:11;unique"`
-	Avatar        string    `gorm:"size:100;unique"`
-	Password      string    `gorm:"not null;size:50"`
+	Uid           int       `gorm:"primary_key;" form:"uid"`
+	Profile       string    `gorm:"not null;size:11;unique" form:"profile"`
+	Avatar        string    `gorm:"size:100;unique" form:"avatar"`
 	Modified_time time.Time `gorm:"default:current_timestamp"`
 }
 
