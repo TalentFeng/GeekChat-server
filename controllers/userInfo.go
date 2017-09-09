@@ -43,8 +43,8 @@ func (c *UserInfoController) SetAvatar() {
 		c.Abort("400")
 	}
 	defer f.Close()
-
-	if mime := h.Header.Get("Content-Type"); mime[0:5] != "image" {
+	mime := h.Header.Get("Content-Type")
+	if mime[0:5] != "image" {
 		beego.Critical(h.Header.Get("Content-Type"))
 		c.Abort("400")
 	}
@@ -56,13 +56,13 @@ func (c *UserInfoController) SetAvatar() {
 	)
 	defer db.Close()
 	os.MkdirAll(dir, 0777)
-	beego.Info(dir)
-	err = c.SaveToFile("img", dir+"/"+tools.Md5sum(h.Filename))
+	w, _ := os.OpenFile(dir+"/"+tools.Md5sum(h.Filename)+"."+mime[6:], os.O_CREATE|os.O_RDWR, 0777)
+	err = tools.ImageScale(f, w, 1280, 720)
 	if err != nil {
 		beego.Critical(err)
 		c.Abort("500")
 	}
-	err = db.Save(&models.UserInfo{Uid: uid, Avatar: tools.Md5sum(h.Filename)}).Error
+	err = db.Save(&models.UserInfo{Uid: uid, Avatar: tools.Md5sum(h.Filename) + "." + mime[6:]}).Error
 	if err != nil {
 		beego.Critical(err)
 		c.Abort("500")
