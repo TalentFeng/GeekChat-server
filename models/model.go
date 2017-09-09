@@ -33,10 +33,19 @@ type User struct {
 
 type UserInfo struct {
 	Uid           int       `gorm:"primary_key;"`
+	NickName      string    `gorm:"size:11;"`
 	Profile       string    `gorm:"not null;size:11;unique"`
 	Avatar        string    `gorm:"size:100;unique"`
-	Password      string    `gorm:"not null;size:50"`
+	Sex           int       `gorm:"size:1"`
+	Country       int       `gorm:":size:1"`
+	Area          int       `gorm:":size:1"`
 	Modified_time time.Time `gorm:"default:current_timestamp"`
+}
+
+type Json struct {
+	Code int `json:"code"`
+	Msg  string
+	Data interface{}
 }
 
 func AutoMigrate() {

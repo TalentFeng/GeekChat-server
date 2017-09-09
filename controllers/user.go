@@ -104,6 +104,7 @@ func (c *UserController) Logout() {
 // @Success 200 {string} ok
 // @Failure 400 参数错误
 // @Failure 500 服务器错误
+// @router /reset [post]
 func (c *UserController) ResetPassword() {
 	mail := c.GetString("mail")
 	password := c.GetString("password")

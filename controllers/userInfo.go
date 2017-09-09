@@ -14,7 +14,18 @@ type UserInfoController struct {
 	AppController
 }
 
+// @Title 获取用户信息
+// @Description 获取用户信息
+// @Success 200 {object} models.UserInfo
+// @Failure 400 "失败"
+// @Failure 500 服务器错误
 func (c *UserInfoController) Get() {
+	uid := c.GetSession("uid").(int)
+	var user = models.UserInfo{Uid: uid}
+	db := models.GetDb()
+	defer db.Close()
+	db.Find(user, user)
+	c.Data["json"] = user
 	c.ServeJSON()
 }
 
