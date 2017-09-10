@@ -32,7 +32,6 @@ type User struct {
 }
 
 type UserInfo struct {
-<<<<<<< HEAD
 	Uid           int       `gorm:"primary_key;"`
 	NickName      string    `gorm:"size:11;"`
 	Profile       string    `gorm:"not null;size:11;unique"`
@@ -40,11 +39,6 @@ type UserInfo struct {
 	Sex           int       `gorm:"size:1"`
 	Country       int       `gorm:":size:1"`
 	Area          int       `gorm:":size:1"`
-=======
-	Uid           int       `gorm:"primary_key;" form:"uid"`
-	Profile       string    `gorm:"not null;size:11;unique" form:"profile"`
-	Avatar        string    `gorm:"size:100;unique" form:"avatar"`
->>>>>>> 8f76d5a037ab4586507233e679c173f895c38575
 	Modified_time time.Time `gorm:"default:current_timestamp"`
 }
 
